@@ -396,3 +396,20 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Dossiers à ignorer
+Archives
+Bak
+Tmp
+Codes
+
+*.bat
+*.ini
+*.html
+*.exe
+*.exe.config
+*.*.dll
+*.*.xml
+*.xml
+XL2Csv_*.txt
+ExcelLibrary.dll

@@ -1,0 +1,15 @@
+REGEDIT4
+
+; Fusionnez ce fichier pour augmenter la valeur de TypeGuessRows
+;  Ce paramètre est utile (pour Excel < 2003) afin de lire 
+;  un plus grand nombre de lignes pour déterminer le type de 
+;  données capable de stocker les valeurs d'une colonne Excel
+;  lors des opérations d'import via les technologies JET et ODBC
+; 4000 hex = 16384 en décimal
+;  800 hex =  2048 en décimal
+;    8 hex =     8 en décimal (valeur par défaut)
+; (cette opération n'est pas nécessaire pour Excel 2003)
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Jet\4.0\Engines\Excel]
+"TypeGuessRows"=dword:00004000
+

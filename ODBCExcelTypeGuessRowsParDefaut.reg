@@ -1,0 +1,14 @@
+REGEDIT4
+
+; Fusionnez ce fichier pour rétablir la valeur par défaut
+;  de TypeGuessRows qui est 8
+;  Ce paramètre est utile (pour Excel < 2003) afin de lire 
+;  un plus grand nombre de lignes pour déterminer le type de 
+;  données capable de stocker les valeurs d'une colonne Excel
+;  lors des opérations d'import via les technologies JET et ODBC
+;  8 hex = 8 en décimal
+; http://msdn2.microsoft.com/en-us/library/bb177610.aspx
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Jet\4.0\Engines\Excel]
+"TypeGuessRows"=dword:00000008
+
