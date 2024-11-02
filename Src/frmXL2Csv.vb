@@ -56,7 +56,6 @@ Public Class frmXL2Csv
         XL2CsvGroup ' Toujours via ODBC
         XL2Csv      ' Méthode rapide via ExcelLibrary (et non plus via ODBC)
         XL2CsvNPOI  ' Méthode rapide via NPOI
-        XL2CsvSSG   ' Méthode rapide via SpreadSheetGear 09/08/2012
         ' Ancienne méthode via ODBC
         ' (pour classeur Excel correctement formaté : colonnes homogènes) 
         XL2CsvODBC
@@ -71,7 +70,6 @@ Public Class frmXL2Csv
     ' --------------------------------------------
     Public Const sXL2Csv$ = "XL2Csv" ' Option par défaut : XL2Csv via ExcelLibrary
     Public Const sXL2CsvNPOI$ = "XL2CsvNPOI" ' XL2Csv via NPOI
-    Public Const sXL2CsvSSG$ = "XL2CsvSSG" ' XL2Csv via SpreadSheetGear 09/08/2012
     Public Const sXL2CsvAutomation$ = "XL2CsvAutomation" ' XL2Csv via automation Excel
     Public Const sXL2CsvODBC$ = "XL2CsvODBC"   ' XL2Csv via ODBC
     ' --------------------------------------------
@@ -97,9 +95,7 @@ Public Class frmXL2Csv
     Private Const sMenuCtx_CleCmdConvertirEnCsvNPOI$ = "XL2Csv.ConvertirEnCsvNPOI"
     Private Const sMenuCtx_CleCmdConvertirEnCsvNPOIDescription$ =
         "Convertir en fichiers Csv (via NPOI)"
-    Private Const sMenuCtx_CleCmdConvertirEnCsvSSG$ = "XL2Csv.ConvertirEnCsvSSG" ' 09/08/2012
-    Private Const sMenuCtx_CleCmdConvertirEnCsvSSGDescription$ =
-        "Convertir en fichiers Csv (via SSG)"
+
     Private Const sMenuCtx_CleCmdConvertirEn1Csv$ = "XL2Csv.ConvertirEn1Csv" ' XL2CsvGroup
     Private Const sMenuCtx_CleCmdConvertirEn1CsvDescription$ = "Convertir en un fichier Csv fusionné"
     Private Const sMenuCtx_CleCmdConvertirEnTxt$ = "XL2Csv.ConvertirEnTxt"
@@ -151,7 +147,6 @@ Public Class frmXL2Csv
             Me.cmdEnleverMenuCtx.Visible = True
             Me.chkXL2Csv.Visible = True
             Me.chkXL2CsvNPOI.Visible = True
-            If bSpreadSheetGear Then Me.chkXL2CsvSSG.Visible = True
             Me.chkFusionCsv.Visible = True
             Me.chkODBC.Visible = True
             Me.chkTexte.Visible = True
@@ -161,8 +156,6 @@ Public Class frmXL2Csv
                 sCmd & "XL2Csv : Convertir un fichier Excel en fichiers Csv via ExcelLibrary")
             Me.ToolTip1.SetToolTip(Me.chkXL2CsvNPOI,
                 sCmd & "XL2CsvNPOI : Convertir un fichier Excel en fichiers Csv via NPOI")
-            Me.ToolTip1.SetToolTip(Me.chkXL2CsvSSG,
-                sCmd & "XL2CsvSSG : Convertir un fichier Excel en fichiers Csv via SpreadSheetGear") ' 09/08/2012
             Me.ToolTip1.SetToolTip(Me.chkFusionCsv,
                 sCmd & "XL2CsvGroup : Convertir un fichier Excel en un fichier Csv via ODBC")
             Me.ToolTip1.SetToolTip(Me.chkAutomation,
@@ -183,8 +176,6 @@ Public Class frmXL2Csv
             "XL2Csv" & sVersion & " : Convertir un fichier Excel en fichiers Csv via ExcelLibrary"
             Case TypeConv.XL2CsvNPOI : Me.Text =
             "XL2Csv" & sVersion & " : Convertir un fichier Excel en fichiers Csv via NPOI"
-            Case TypeConv.XL2CsvSSG : Me.Text =
-            "XL2Csv" & sVersion & " : Convertir un fichier Excel en fichiers Csv via SpreaSheetGear" ' 09/08/2012
             Case TypeConv.XL2CsvAutomation : Me.Text =
             "XL2Csv" & sVersion & " : Convertir un fichier Excel en fichiers Csv via automation Excel"
             Case TypeConv.XL2CsvODBC : Me.Text =
@@ -208,8 +199,6 @@ Public Class frmXL2Csv
             bOk = bConvertirXLRapide(Me.m_sCheminFichierXL, Me.m_msgDelegue)
         ElseIf Me.m_iTypeConv = TypeConv.XL2CsvNPOI Then
             bOk = bConvertirXLRapideNPOI(Me.m_sCheminFichierXL, Me.m_msgDelegue)
-        ElseIf Me.m_iTypeConv = TypeConv.XL2CsvSSG Then
-            bOk = bConvertirXLRapideSSG(Me.m_sCheminFichierXL, Me.m_msgDelegue) ' 09/08/2012
         ElseIf Me.m_iTypeConv = TypeConv.XL2CsvAutomation Then
             bOk = bConvertirXLAutomation(Me.m_sCheminFichierXL, Me.m_msgDelegue)
         ElseIf Me.m_iTypeConv = TypeConv.XL2Txt Then
@@ -269,8 +258,6 @@ Public Class frmXL2Csv
             bConvertirXLRapide(Me.m_sCheminFichierXL, Me.m_msgDelegue)
         ElseIf Me.m_iTypeConv = TypeConv.XL2CsvNPOI Then
             bConvertirXLRapideNPOI(Me.m_sCheminFichierXL, Me.m_msgDelegue)
-        ElseIf Me.m_iTypeConv = TypeConv.XL2CsvSSG Then
-            bConvertirXLRapideSSG(Me.m_sCheminFichierXL, Me.m_msgDelegue) ' 09/08/2012
         ElseIf Me.m_iTypeConv = TypeConv.XL2Txt Then
             bConvertirXL2Txt(Me.m_sCheminFichierXL, Me.m_msgDelegue)
         Else
@@ -545,8 +532,7 @@ Erreur:
         Dim sType$ = sMenuCtx_TypeFichierSelect
         AjouterMenuCtx(sType)
         If sType <> sMenuCtx_TypeFichierTous Then
-            'If bExcel2007SupportNPOI Then _
-            If bExcel2007SupportSSG AndAlso Me.chkXL2CsvSSG.Checked Then _
+            If bExcel2007SupportNPOI AndAlso Me.chkXL2CsvNPOI.Checked Then _
                 AjouterMenuCtx(sMenuCtx_TypeFichierExcel2007)
         End If
 
@@ -558,15 +544,13 @@ Erreur:
         Dim sType$ = sMenuCtx_TypeFichierSelect
         EnleverMenuCtx(sType)
         If sType <> sMenuCtx_TypeFichierTous Then
-            'If bExcel2007SupportNPOI Then _
-            If bExcel2007SupportSSG AndAlso Me.chkXL2CsvSSG.Checked Then _
+            If bExcel2007SupportNPOI AndAlso Me.chkXL2CsvNPOI.Checked Then _
                 EnleverMenuCtx(sMenuCtx_TypeFichierExcel2007)
         End If
 
     End Sub
 
     Private Sub AjouterMenuCtx(sTypeFichierExcel$)
-        'Optional bExcel2007 As Boolean = False)
 
         Dim sCheminExe$ = Application.ExecutablePath
         Const bPrompt As Boolean = False
@@ -575,13 +559,6 @@ Erreur:
         ' Ajouter un pointeur HKCR\.xls vers HKCR\XL2Csv
         'bAjouterTypeFichier(sMenuCtx_ExtFichierIdx, sMenuCtx_TypeFichierIdx, _
         '    sMenuCtx_ExtFichierIdxDescription)
-
-        If Me.chkXL2CsvSSG.Checked Then _
-        bAjouterMenuContextuel(sTypeFichierExcel, sMenuCtx_CleCmdConvertirEnCsvSSG,
-            bPrompt, , sMenuCtx_CleCmdConvertirEnCsvSSGDescription, sCheminExe,
-            sChemin & " " & sXL2CsvSSG)
-
-        'If bExcel2007 Then Exit Sub
 
         If Me.chkXL2CsvNPOI.Checked Then _
             bAjouterMenuContextuel(sTypeFichierExcel, sMenuCtx_CleCmdConvertirEnCsvNPOI,
@@ -624,13 +601,6 @@ Erreur:
     End Sub
 
     Private Sub EnleverMenuCtx(sTypeFichierExcel$)
-        'Optional bExcel2007 As Boolean = False)
-
-        If Me.chkXL2CsvSSG.Checked Then _
-        bAjouterMenuContextuel(sTypeFichierExcel, sMenuCtx_CleCmdConvertirEnCsvSSG,
-            bEnlever:=True, bPrompt:=False)
-
-        'If bExcel2007 Then Exit Sub
 
         If Me.chkXL2CsvNPOI.Checked Then _
             bAjouterMenuContextuel(sTypeFichierExcel, sMenuCtx_CleCmdConvertirEnCsvNPOI,
@@ -669,10 +639,6 @@ Erreur:
             sMenuCtx_CleCmdConvertirEnCsvNPOI
         Dim bCleXL2CsvNPOI As Boolean = bCleRegistreCRExiste(sCleDescriptionCmdNPOI)
 
-        Dim sCleDescriptionCmdSSG$ = sTypeFichierExcel & sShell &
-            sMenuCtx_CleCmdConvertirEnCsvSSG
-        Dim bCleXL2CsvSSG As Boolean = bCleRegistreCRExiste(sCleDescriptionCmdSSG)
-
         Dim sCleDescriptionCmdFusion$ = sTypeFichierExcel & sShell &
             sMenuCtx_CleCmdConvertirEn1Csv
         Dim bCleFusion As Boolean = bCleRegistreCRExiste(sCleDescriptionCmdFusion)
@@ -689,7 +655,7 @@ Erreur:
             sMenuCtx_CleCmdConvertirEnTxt
         Dim bCleTxt As Boolean = bCleRegistreCRExiste(sCleDescriptionCmdTxt)
 
-        If bCleXL2Csv OrElse bCleXL2CsvNPOI OrElse bCleXL2CsvSSG OrElse
+        If bCleXL2Csv OrElse bCleXL2CsvNPOI OrElse
            bCleFusion OrElse bCleAutom OrElse bCleODBC OrElse bCleTxt Then
 
             Me.cmdAjouterMenuCtx.Enabled = False
@@ -697,7 +663,6 @@ Erreur:
 
             Me.chkXL2Csv.Checked = bCleXL2Csv
             Me.chkXL2CsvNPOI.Checked = bCleXL2CsvNPOI
-            Me.chkXL2CsvSSG.Checked = bCleXL2CsvSSG
             Me.chkFusionCsv.Checked = bCleFusion
             Me.chkAutomation.Checked = bCleAutom
             Me.chkODBC.Checked = bCleODBC
@@ -706,7 +671,6 @@ Erreur:
             ' Interdire de décocher
             Me.chkXL2Csv.Enabled = False
             Me.chkXL2CsvNPOI.Enabled = False
-            Me.chkXL2CsvSSG.Enabled = False
             Me.chkFusionCsv.Enabled = False
             Me.chkAutomation.Enabled = False
             Me.chkODBC.Enabled = False
@@ -720,7 +684,6 @@ Erreur:
             ' Autoriser à cocher
             Me.chkXL2Csv.Enabled = True
             Me.chkXL2CsvNPOI.Enabled = True
-            Me.chkXL2CsvSSG.Enabled = True
             Me.chkFusionCsv.Enabled = True
             Me.chkODBC.Enabled = True
             Me.chkTexte.Enabled = True

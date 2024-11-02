@@ -402,6 +402,7 @@ Archives
 Bak
 Tmp
 Codes
+Doc
 
 *.bat
 *.ini
@@ -413,3 +414,4 @@ Codes
 *.xml
 XL2Csv_*.txt
 ExcelLibrary.dll
+DLL/ADODB.dll

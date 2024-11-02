@@ -46,7 +46,6 @@ Partial Class frmXL2Csv : Inherits Form
         Me.chkAutomation = New System.Windows.Forms.CheckBox()
         Me.chkXL2Csv = New System.Windows.Forms.CheckBox()
         Me.chkXL2CsvNPOI = New System.Windows.Forms.CheckBox()
-        Me.chkXL2CsvSSG = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'sbStatusBar
@@ -86,9 +85,9 @@ Partial Class frmXL2Csv : Inherits Form
         Me.cmdAjouterMenuCtx.Size = New System.Drawing.Size(103, 25)
         Me.cmdAjouterMenuCtx.TabIndex = 35
         Me.cmdAjouterMenuCtx.Text = "Ajouter menu ctx."
-        Me.ToolTip1.SetToolTip(Me.cmdAjouterMenuCtx, "Ajouter les menus contextuels pour convertir directement un fichier Excel depuis " & _
-        "l'explorateur de fichiers (sous Windows Vista, il faut préalablement lancer l'ap" & _
-        "plication en tant qu'admin.)")
+        Me.ToolTip1.SetToolTip(Me.cmdAjouterMenuCtx, "Ajouter les menus contextuels pour convertir directement un fichier Excel depuis " &
+        "l'explorateur de fichiers (il faut préalablement lancer l'application en tant qu" &
+        "'admin.)")
         Me.cmdAjouterMenuCtx.UseVisualStyleBackColor = False
         '
         'cmdEnleverMenuCtx
@@ -102,8 +101,8 @@ Partial Class frmXL2Csv : Inherits Form
         Me.cmdEnleverMenuCtx.Size = New System.Drawing.Size(103, 25)
         Me.cmdEnleverMenuCtx.TabIndex = 36
         Me.cmdEnleverMenuCtx.Text = "Enlever menu ctx."
-        Me.ToolTip1.SetToolTip(Me.cmdEnleverMenuCtx, "Enlever les menus contextuels de XL2Csv (sous Windows Vista, il faut préalablemen" & _
-        "t lancer l'application en tant qu'admin.)")
+        Me.ToolTip1.SetToolTip(Me.cmdEnleverMenuCtx, "Enlever les menus contextuels de XL2Csv (il faut préalablement lancer l'applicati" &
+        "on en tant qu'admin.)")
         Me.cmdEnleverMenuCtx.UseVisualStyleBackColor = False
         '
         'chkFusionCsv
@@ -174,22 +173,10 @@ Partial Class frmXL2Csv : Inherits Form
         Me.chkXL2CsvNPOI.UseVisualStyleBackColor = True
         Me.chkXL2CsvNPOI.Visible = False
         '
-        'chkXL2CsvSSG
-        '
-        Me.chkXL2CsvSSG.AutoSize = True
-        Me.chkXL2CsvSSG.Location = New System.Drawing.Point(475, 61)
-        Me.chkXL2CsvSSG.Name = "chkXL2CsvSSG"
-        Me.chkXL2CsvSSG.Size = New System.Drawing.Size(88, 17)
-        Me.chkXL2CsvSSG.TabIndex = 43
-        Me.chkXL2CsvSSG.Text = "XL2Csv SSG"
-        Me.chkXL2CsvSSG.UseVisualStyleBackColor = True
-        Me.chkXL2CsvSSG.Visible = False
-        '
         'frmXL2Csv
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.ClientSize = New System.Drawing.Size(604, 129)
-        Me.Controls.Add(Me.chkXL2CsvSSG)
         Me.Controls.Add(Me.chkXL2CsvNPOI)
         Me.Controls.Add(Me.chkXL2Csv)
         Me.Controls.Add(Me.chkAutomation)
@@ -207,7 +194,7 @@ Partial Class frmXL2Csv : Inherits Form
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
-End Sub
+    End Sub
     Public WithEvents cmdAjouterMenuCtx As System.Windows.Forms.Button
     Public WithEvents cmdEnleverMenuCtx As System.Windows.Forms.Button
     Friend WithEvents chkFusionCsv As System.Windows.Forms.CheckBox
@@ -216,6 +203,5 @@ End Sub
     Friend WithEvents chkAutomation As System.Windows.Forms.CheckBox
     Friend WithEvents chkXL2Csv As System.Windows.Forms.CheckBox
     Friend WithEvents chkXL2CsvNPOI As System.Windows.Forms.CheckBox
-    Friend WithEvents chkXL2CsvSSG As System.Windows.Forms.CheckBox
 
 End Class

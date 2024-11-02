@@ -18,11 +18,10 @@ Module _modDepart
     Public m_sTitreMsg$ = sNomAppli
     Public Const sTitreMsgDescription$ = " : Convertir un fichier Excel en fichiers Csv"
 
-    Private Const sDateVersionXL2Csv$ = "18/08/2024"
+    Private Const sDateVersionXL2Csv$ = "02/11/2024"
     Public Const sDateVersionAppli$ = sDateVersionXL2Csv
 
-    'Public Const bExcel2007SupportNPOI As Boolean = False
-    Public Const bExcel2007SupportSSG As Boolean = True
+    Public Const bExcel2007SupportNPOI As Boolean = True
     Public Const dDateNulle As Date = #12:00:00 AM#
 
     Public Const sExtXlsx$ = ".xlsx"
@@ -64,10 +63,9 @@ Module _modDepart
                 If Not bFichierExiste(sCheminFichier, bPrompt:=True) Then _
                     bSyntaxeOk = False
 
-                ' S'il n'y a qu'un seul argument et que l'extension du fichier est .xlsx alors SSG
+                ' S'il n'y a qu'un seul argument et que l'extension du fichier est .xlsx alors NPOI
                 If sCheminFichier.ToLower.EndsWith(sExtXlsx) Then
-                    'iTypeConv = frmXL2Csv.TypeConv.XL2CsvNPOI Pas encore implémenté
-                    If bSpreadSheetGear Then iTypeConv = frmXL2Csv.TypeConv.XL2CsvSSG ' 09/08/2012
+                    iTypeConv = frmXL2Csv.TypeConv.XL2CsvNPOI
                 End If
 
                 GoTo Suite
@@ -78,8 +76,6 @@ Module _modDepart
                 iTypeConv = frmXL2Csv.TypeConv.XL2Csv
             ElseIf sCmd = frmXL2Csv.sXL2CsvNPOI Then
                 iTypeConv = frmXL2Csv.TypeConv.XL2CsvNPOI
-            ElseIf sCmd = frmXL2Csv.sXL2CsvSSG Then
-                iTypeConv = frmXL2Csv.TypeConv.XL2CsvSSG ' 09/08/2012
             ElseIf sCmd = frmXL2Csv.sXL2CsvAutomation Then
                 iTypeConv = frmXL2Csv.TypeConv.XL2CsvAutomation
             ElseIf sCmd = frmXL2Csv.sXL2CsvODBC Then
@@ -104,8 +100,6 @@ Suite:
                 "en autant de fichiers Csv qu'il y a de feuille Excel" & vbCrLf &
                 "Options possibles :" & vbCrLf &
                 "XL2CsvNPOI : utiliser la librairie NPOI au lieu d'ExcelLibrary" & vbCrLf
-            If bSpreadSheetGear Then sTxt &=
-                "XL2CsvSSG : utiliser la librairie SpreadSheetGear au lieu d'ExcelLibrary" & vbCrLf
             sTxt &=
                 "XL2Txt : pour convertir en un seul fichier Texte (via ExcelLibrary)" & vbCrLf &
                 "XL2CsvGroup : pour convertir en un seul fichier Csv fusionné" & vbCrLf &
@@ -114,8 +108,6 @@ Suite:
                 "Exemples : " & vbCrLf &
                 "XL2Csv.exe C:\Tmp\MonFichierExcel" & vbCrLf &
                 "XL2Csv.exe C:\Tmp\MonFichierExcel XL2CsvNPOI" & vbCrLf
-            If bSpreadSheetGear Then sTxt &=
-                "XL2Csv.exe C:\Tmp\MonFichierExcel XL2CsvSSG" & vbCrLf
             sTxt &=
                 "XL2Csv.exe C:\Tmp\MonFichierExcel XL2CsvODBC" & vbCrLf &
                 "XL2Csv.exe C:\Tmp\MonFichierExcel XL2CsvAutomation" & vbCrLf &
@@ -133,22 +125,24 @@ Suite:
         ' Il faut donc installer les PIA, ou sinon, il suffit de copier la dll
         '  dans le répertoire de l'application
         If iTypeConv = frmXL2Csv.TypeConv.XL2CsvGroup Then
-            If Not bFichierExiste(Application.StartupPath & "\ADODB.dll",
-                bPrompt:=True) Then Exit Sub
+            If Not bFichierExiste(Application.StartupPath & "\DLL\ADODB.dll") Then
+                If Not bFichierExiste(Application.StartupPath & "\ADODB.dll",
+                    bPrompt:=True) Then Exit Sub
+            End If
         End If
         If iTypeConv = frmXL2Csv.TypeConv.XL2Csv Or
            iTypeConv = frmXL2Csv.TypeConv.XL2Txt Then
-            If Not bFichierExiste(Application.StartupPath & "\ExcelLibrary.dll",
-                bPrompt:=True) Then Exit Sub
+            If Not bFichierExiste(Application.StartupPath & "\DLL\ExcelLibrary.dll") Then
+                If Not bFichierExiste(Application.StartupPath & "\ExcelLibrary.dll",
+                    bPrompt:=True) Then Exit Sub
+            End If
         End If
         If iTypeConv = frmXL2Csv.TypeConv.XL2CsvNPOI Then
-            ' 17/08/2024 NPOI.dll -> NPOI.Core.dll
-            'If Not bFichierExiste(Application.StartupPath & "\NPOI.dll", bPrompt:=True) Then Exit Sub
-            If Not bFichierExiste(Application.StartupPath & "\NPOI.Core.dll", bPrompt:=True) Then Exit Sub
-        End If
-        If iTypeConv = frmXL2Csv.TypeConv.XL2CsvSSG Then ' 09/08/2012
-            If Not bFichierExiste(Application.StartupPath & "\SpreadSheetGear.dll",
-                bPrompt:=True) Then Exit Sub
+            If Not bFichierExiste(Application.StartupPath & "\DLL\NPOI.Core.dll") Then
+                ' 17/08/2024 NPOI.dll -> NPOI.Core.dll
+                'If Not bFichierExiste(Application.StartupPath & "\NPOI.dll", bPrompt:=True) Then Exit Sub
+                If Not bFichierExiste(Application.StartupPath & "\NPOI.Core.dll", bPrompt:=True) Then Exit Sub
+            End If
         End If
 
         Dim oFrm As New frmXL2Csv

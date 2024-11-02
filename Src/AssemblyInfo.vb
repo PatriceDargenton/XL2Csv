@@ -11,4 +11,4 @@ Imports System.Reflection
 <Assembly: AssemblyProduct("XL2Csv")>
 <Assembly: AssemblyCopyright("Copyright © 2024")>
 <Assembly: AssemblyTrademark("XL2Csv")>
-<Assembly: AssemblyVersion("1.1.3.*")>
+<Assembly: AssemblyVersion("1.1.4.*")>
